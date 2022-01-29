@@ -3,8 +3,6 @@ import _ from "lodash";
 const iframe = document.querySelector('iframe');
 const player = new Vimeo.Player(iframe);
 
-// var throttle = require('lodash.throttle');
-
 function setVideoTime(){
     let seco = localStorage.getItem("videoplayer-current-time", );
     console.log(`On Page load ${seco}`);
@@ -16,7 +14,6 @@ function setVideoTime(){
             case 'RangeError':
                 // the time was less than 0 or greater than the video’s duration
                 break;
-    
             default:
                 // some other error occurred
                 break;
@@ -25,9 +22,6 @@ function setVideoTime(){
 }
 
 setVideoTime();
-
-// _.throttle(onTimeUpdate, 1000);
-
 
   player.on('timeupdate', _.throttle(function () {
     console.log('played the video!');

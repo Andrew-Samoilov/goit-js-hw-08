@@ -1,6 +1,9 @@
 console.log(`6666`);
+import _ from "lodash";
 const iframe = document.querySelector('iframe');
 const player = new Vimeo.Player(iframe);
+
+// var throttle = require('lodash.throttle');
 
 function setVideoTime(){
     let seco = localStorage.getItem("videoplayer-current-time", );
@@ -23,19 +26,23 @@ function setVideoTime(){
 
 setVideoTime();
 
-player.on('timeupdate', function() {
+// _.throttle(onTimeUpdate, 1000);
+
+
+  player.on('timeupdate', _.throttle(function () {
     console.log('played the video!');
-    
-    player.getCurrentTime().then(function(seconds) {
+    player
+      .getCurrentTime()
+      .then(function (seconds) {
         // seconds = the current playback position
-        // console.log(`seconds ${seconds}`);
-        localStorage.setItem("videoplayer-current-time", seconds);
-        // localStorage.setItem("bosya-the-cat", 'super cool');
-        // localStorage.setItem("lord-the-dog", 'amazing');
-    }).catch(function(error) {
-        console.log(`seconds ${seconds}, error ${error}`);
-    });
-});
+        localStorage.setItem('videoplayer-current-time', seconds);
+        console.log(`seconds ${seconds}`);
+      })
+      .catch(function (error) { console.log(`seconds ${seconds}, error ${error}`);});
+  }, 1000)
+  
+  );
+
 
 player.getVideoTitle().then(function(title) {
     console.log('title:', title);

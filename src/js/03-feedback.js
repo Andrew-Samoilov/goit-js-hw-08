@@ -15,9 +15,13 @@ onPageLoad();
 
 function onFormSubmit(evt) {
   evt.preventDefault();
-  evt.currentTarget.reset();
-  localStorage.removeItem(STORAGE_KEY);
-  console.log(`E-mail: ${formData.email}, Message: ${formData.message}`);
+
+    evt.currentTarget.reset();
+    localStorage.removeItem(STORAGE_KEY);
+    console.log(`E-mail: ${formData.email}, Message: ${formData.message}`);
+    formData.email = '';
+    formData.message = '';
+  
 }
 
 function onFormInput(evt) {
@@ -27,9 +31,12 @@ function onFormInput(evt) {
 
 function onPageLoad() {
   console.log(`Loading..`);
+  // const loadMess=
   const formText = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  // console.log(`localStorage.getItem(STORAGE_KEY) ${localStorage.getItem(STORAGE_KEY)}`);
+  // console.log(`.email ${formText.email} .message ${formText.message}`);
   if (formText) {
-    refs.email.value = formText.email;
-    refs.textarea.value = formText.message;
-  }
-}
+    if (formText.email != null) refs.email.value = formText.email;
+    if (formText.message) refs.textarea.value = formText.message;
+  };
+};

@@ -1,51 +1,78 @@
 console.log(`6666`);
-import _ from 'lodash';
+import throttle from 'lodash.throttle';
 
-const formInput = document.querySelector('.feedback-form');
-const emailInput = document.querySelector('.feedback-form input');
-const textInput = document.querySelector('.feedback-form textarea');
+const refs={
+  form: document.querySelector('.feedback-form'),
+  email: document.querySelector('.feedback-form input'),
+  textarea: document.querySelector('.feedback-form textarea'),
+}
 const STORAGE_KEY='feedback-form-state';
 
-let formState = {
-    email: emailInput.value,
-    text: textInput.value,
+refs.form.addEventListener('submit', onFormSubmit);
+refs.textarea.addEventListener('input', throttle( onTextareaInput),500); 
+onLoadFormFromLocal();
+
+function onFormSubmit(evt){
+  evt.preventDefault();
+  console.log(`func onFormSubmit`);
+  evt.currentTarget.reset();
+  localStorage.removeItem(STORAGE_KEY);
+  
+}
+
+function onTextareaInput(evt) {
+  // console.log(`func onTextareaInput`);
+  const message = evt.target.value;
+  // console.log(message);
+  localStorage.setItem(STORAGE_KEY, message);
+}
+
+function onLoadFormFromLocal() {
+    console.log(`Loading..`);
+    const savedMess=localStorage.getItem(STORAGE_KEY);
+  if (savedMess){
+    // console.log(`savedMess ${savedMess}`);
+    refs.textarea.value=savedMess;
   };
+};
 
-let formJSON = JSON.stringify(formState);
 
-function saveFormToLocal() {
-    // console.log(`emailInput.value ${emailInput.value}`); 
-    // console.log(`textInput.value ${textInput.value}`); 
-    
-  formState.email = emailInput.value;
-  formState.text = textInput.value;
-  formJSON = JSON.stringify(formState);
-  console.log('input every 500ms');
-  localStorage.setItem(STORAGE_KEY, formJSON);
-  console.log(`formJSON ${formJSON}`);
-}
+// formInput = document.querySelector('.feedback-form');
+// const emailInput = document.querySelector('.feedback-form input');
+// const textInput = document.querySelector('.feedback-form textarea');
 
-function loadFormFromLocal() {
-  console.log(`Loading`);
-//   try {
-    formState = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    console.log(formState);
-    emailInput.value = formState.email;
-    textInput.value = formState.text;
-    // Code that may throw a runtime error
-//   } catch (error) {
-    // console.log(`Load error, ${error}`);
-//   }
-}
 
-loadFormFromLocal();
+// let formState = {email: emailInput.value, text: textInput.value};
+// let formJSON = JSON.stringify(formState);
 
-formInput.addEventListener(
-  'input',
-  _.debounce(() => {
-    saveFormToLocal();
-  }, 500),
-);
+// function saveFormToLocal() {
+//   formState.email = emailInput.value;
+//   formState.text = textInput.value;
+//   formJSON = JSON.stringify(formState);
+//   localStorage.setItem(STORAGE_KEY, formJSON);
+//   console.log(`form JSON ${formJSON}`);
+// }
+
+// function loadFormFromLocal() {
+//   console.log(`Loading`);
+// //   try {
+//     formState = JSON.parse(localStorage.getItem(STORAGE_KEY));
+//     console.log(formState);
+//     emailInput.value = formState.email;
+//     textInput.value = formState.text;
+//     // Code that may throw a runtime error
+// //   } catch (error) {
+//     // console.log(`Load error, ${error}`);
+// //   }
+// }
+
+// loadFormFromLocal();
+
+// formInput.addEventListener('input',_.debounce(() => {
+//     console.log('input every 500ms');
+//     saveFormToLocal();
+//   }, 500),
+// );
 
 // formInput.addEventListener('submit', onFormSubmit());
 
